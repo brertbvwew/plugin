@@ -189,8 +189,6 @@ async function executeKickAll(sock, m, participants, botId, reply) {
     }
 }
 
-// 3. Command Triggers (Regex)
-handler.command = /^(kickall|purgegroup|resetgroup|massremove)$/i
 
 // 4. Menu Metadata
 handler.command = /^(kickall)$/i
