@@ -1,3 +1,5 @@
+// do not touch this unless u know what u doing
+
 import fs from 'fs'
 import os from 'os'
 
