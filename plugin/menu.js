@@ -1,16 +1,13 @@
-// do not touch this unless u know what u doing
-
 import fs from 'fs'
 import os from 'os'
+import axios from 'axios'
 
 let handler = async (m, { sock, prefix, isOwner, isPremium }) => {
-
     const uptime = process.uptime()
     const muptime = clockString(uptime * 1000)
-
     const totalMem = (os.totalmem() / 1024 / 1024 / 1024).toFixed(2)
     const freeMem = (os.freemem() / 1024 / 1024 / 1024).toFixed(2)
-
+    const imageBuffer = (await axios.get(global.thumbmenu, { responseType: 'arraybuffer' })).data
     const pluginFolder = './plugin'
     const files = fs.readdirSync(pluginFolder).filter(v => v.endsWith('.js'))
 
@@ -20,15 +17,11 @@ let handler = async (m, { sock, prefix, isOwner, isPremium }) => {
     for (let file of files) {
         const module = await import(`./${file}?update=${Date.now()}`)
         const plugin = module.default
-
         if (!plugin || !plugin.help) continue
-
         let tag = plugin.tags ? plugin.tags[0].toUpperCase() : 'OTHER'
         if (!categories[tag]) categories[tag] = []
-
         if (Array.isArray(plugin.help)) {
-            plugin.help.forEach(h => {
-                categories[tag].push(h)
+            plugin.help.forEach(h => {categories[tag].push(h)
                 totalCommands++
             })
         } else {
@@ -46,11 +39,10 @@ let handler = async (m, { sock, prefix, isOwner, isPremium }) => {
     menuText += `└──\n\n`
 
     Object.keys(categories).sort().forEach(tag => {
-        menuText += `┏━━〔 ${tag} \n`
-        categories[tag].forEach(cmd => {
-            menuText += `↳ ${prefix}${cmd}\n`
-        })
-        menuText += `┗━━━\n\n`
+        menuText += `┌──⊷ *${tag}*\n`
+        let cmds = categories[tag].map(cmd => `\`${cmd}\``).join('  ')
+        menuText += `│ ${cmds}\n`
+        menuText += `└──────────────┈\n\n`
     })
 
     menuText += `_Type ${prefix}ping to test bot speed_`
@@ -64,7 +56,7 @@ let handler = async (m, { sock, prefix, isOwner, isPremium }) => {
             externalAdReply: {
                 title: `${global.namebot}`,
                 body: `ᴅᴇᴠᴇʟᴏᴘᴇᴅ ʙʏ ᴄᴏᴅᴇʀxꜱᴀ`,
-                thumbnailUrl: 'https://i.ibb.co/Hfxx9mFM/image.png',
+                thumbnail: imageBuffer,
                 sourceUrl: 'https://github.com/coderxsa',
                 mediaType: 1,
                 renderLargerThumbnail: true
