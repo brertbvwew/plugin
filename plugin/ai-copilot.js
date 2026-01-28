@@ -30,6 +30,6 @@ let handler = async (m, { sock, reply, text, prefix, command }) => {
                                                                                     handler.command = ["copilot2trip", "copilot"]
                                                                                     handler.help = ["copilot2trip", "copilot"]
                                                                                     handler.tags = ["ai"]
-                                                                                    handler.register = true
+                                                                                
 
                                                                                     export default handler
